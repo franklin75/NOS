@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">NOS_Android_App</string>
+    <string name="title_activity_upload_photo_menu">UploadPhotoMenu</string>
+</resources>
