@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ceg4110.nos_android_app">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +25,9 @@
         <activity android:name=".PendingMenuFolder" />
         <activity android:name=".AboutMenu" />
         <activity android:name=".Tutorial" />
-        <activity android:name=".ImageClassification"></activity>
+        <activity android:name=".ImageClassification" />
+        <activity android:name=".TakePhoto" />
+        <activity android:name=".PhotoFromGallery"></activity>
     </application>
 
 </manifest>

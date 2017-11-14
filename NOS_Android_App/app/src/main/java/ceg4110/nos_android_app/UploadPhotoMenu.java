@@ -13,4 +13,14 @@ public class UploadPhotoMenu extends AppCompatActivity {
         setContentView(R.layout.activity_upload_photo_menu);
     }
 
+    public void buttonToTakePhoto(View view) {
+        Intent intent = new Intent(this, TakePhoto.class);
+        startActivity(intent);
+    }
+
+    public void buttonToPhotoFromGallery(View view){
+        Intent intent = new Intent(this, PhotoFromGallery.class);
+        startActivity(intent);
+    }
+
 }
