@@ -1,4 +1,4 @@
-package com.example.dan.myapplication;
+package ceg4110.nos_android_app;
 
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,18 +18,16 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by dan on 11/13/17.
+ * Created by dan on 11/19/17.
  */
 
-public class Uploader extends AppCompatActivity {
+public class Uploader {
 
     private String TAG = "TheTag", results, name;
     final int B4 = R.id.button4;
     final int B5 = R.id.button2;
 
-    public void Uploader() {
-        
-    }
+    public void Uploader() {}
 
     public void upload(int clicked) {
 
@@ -41,7 +39,7 @@ public class Uploader extends AppCompatActivity {
         Log.i(TAG, "in upL background");
         results = uploadFile(clicked, name);
         Log.i(TAG, "result: " + results);
-}
+    }
 
     private String uploadFile(int clicked, String name) {
         Log.i(TAG, "in uploadFile");
@@ -88,3 +86,4 @@ public class Uploader extends AppCompatActivity {
         return results;
     }
 }
+
