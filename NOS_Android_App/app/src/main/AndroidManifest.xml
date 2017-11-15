@@ -5,6 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,17 @@
         <activity android:name=".ImageClassification" />
         <activity android:name=".TakePhoto" />
         <activity android:name=".PhotoFromGallery"></activity>
+
+        <provider
+            android:authorities="ceg4110.nos_android_app.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+        
     </application>
 
 </manifest>
