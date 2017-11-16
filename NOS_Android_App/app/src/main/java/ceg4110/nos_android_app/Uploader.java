@@ -18,16 +18,16 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by dan on 11/19/17.
+ * Created by dan on 11/09/17.
  */
 
 public class Uploader {
 
-    private String TAG = "TheTag", results, name;
+    private String TAG = "TheTag", results, res = "", name, serverURL = "http://52.204.111.28";
+    private String[] res2;
+    private File file;
     final int B4 = R.id.button4;
     final int B5 = R.id.button2;
-
-    public void Uploader() {}
 
     public void upload(int clicked) {
 
@@ -37,16 +37,13 @@ public class Uploader {
             name = "/food_no.jpg";
 
         Log.i(TAG, "in upL background");
-        results = uploadFile(clicked, name);
+        results = uploadFile(name);
         Log.i(TAG, "result: " + results);
     }
 
-    private String uploadFile(int clicked, String name) {
+    private String uploadFile(String name) {
         Log.i(TAG, "in uploadFile");
-        Log.i(TAG, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + name);
-        String serverURL = "http://52.204.111.28", res = "";
-        String[] res2;
+        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + name);
         Log.i(TAG, "File...::::" + file + " : " + file.exists());
 
         final MediaType TYPE = MediaType.parse("image/*");
@@ -69,7 +66,6 @@ public class Uploader {
             Log.i(TAG, "res: " + res);
             res2 = res.split("\n");
             res = res2[2];
-            Log.i(TAG, "res2: " + res);
             return res;
 
 

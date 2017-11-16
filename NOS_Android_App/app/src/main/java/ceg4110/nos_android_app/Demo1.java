@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 public class Demo1 extends AppCompatActivity {
 
-    Button bFourth;
     TextView mTextView;
     Context mContext;
     ImageView iView;
@@ -32,7 +31,6 @@ public class Demo1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo1);
-        bFourth = findViewById(R.id.button4);
         mTextView = findViewById(R.id.text);
         bitMap = BitmapFactory.decodeFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/food.jpeg");
         iView = findViewById(R.id.imageView2);
@@ -85,7 +83,7 @@ public class Demo1 extends AppCompatActivity {
                         Log.i(TAG, "Upload succeeded");
                     else {
                         Log.i(TAG, "Upload failed");
-                        mTextView.setText("");
+                        mTextView.setText("Oops");
                         Toast.makeText(getApplicationContext(), "Upload error!", Toast.LENGTH_LONG).show();
                     }
                 }

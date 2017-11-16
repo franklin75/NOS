@@ -32,7 +32,7 @@ public class Demo2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo2);
         mTextView = findViewById(R.id.textView);
-        bitMap = BitmapFactory.decodeFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/banana.jpg");
+        bitMap = BitmapFactory.decodeFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/food_no.jpg");
         iView = findViewById(R.id.imageView);
         iView.setImageBitmap(bitMap);
         mContext = getApplicationContext();
