@@ -14,10 +14,4 @@ public class Tutorial extends AppCompatActivity {
         setContentView(R.layout.activity_tutorial);
     }
 
-    public void buttonToDemo(View view){
-        Intent intent = new Intent(this, Demo1.class);
-        startActivity(intent);
-    }
-
-
 }

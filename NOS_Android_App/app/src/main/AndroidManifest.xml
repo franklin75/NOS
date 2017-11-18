@@ -31,7 +31,6 @@
         <activity android:name=".AboutMenu" />
         <activity android:name=".Tutorial" />
         <activity android:name=".ImageClassification" />
-        <activity android:name=".TakePhoto" />
         <activity android:name=".PhotoFromGallery" />
 
         <provider
@@ -44,14 +43,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".Demo1"
-            android:label="@string/title_activity_demo1"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Demo2"
-            android:label="@string/title_activity_demo2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ResultScreen"></activity>
     </application>
 
 </manifest>

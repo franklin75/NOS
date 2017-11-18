@@ -1,10 +1,6 @@
 package ceg4110.nos_android_app;
 
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -23,27 +19,13 @@ import okhttp3.Response;
 
 public class Uploader {
 
-    private String TAG = "TheTag", results, res = "", name, serverURL = "http://52.204.111.28";
+    private String TAG = "TheTag", results, res = "", serverURL = "http://52.204.111.28";
     private String[] res2;
     private File file;
-    final int B4 = R.id.button4;
-    final int B5 = R.id.button2;
 
-    public void upload(int clicked) {
-
-        if(clicked == B4)
-            name = "/food.jpeg";
-        else if (clicked == B5)
-            name = "/food_no.jpg";
-
-        Log.i(TAG, "in upL background");
-        results = uploadFile(name);
-        Log.i(TAG, "result: " + results);
-    }
-
-    private String uploadFile(String name) {
+    public String uploadFile(String name, String photoPath) {
         Log.i(TAG, "in uploadFile");
-        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + name);
+        file = new File(photoPath);
         Log.i(TAG, "File...::::" + file + " : " + file.exists());
 
         final MediaType TYPE = MediaType.parse("image/*");
