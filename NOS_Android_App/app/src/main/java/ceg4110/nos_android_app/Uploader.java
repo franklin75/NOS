@@ -22,8 +22,7 @@ public class Uploader {
     private String[] res2;
     private File file;
 
-    public String uploadFile(String name, String photoPath) {
-        Log.i(TAG, "in uploadFile");
+    public String[] uploadFile(String name, String photoPath) {
         file = new File(photoPath);
         Log.i(TAG, "File...::::" + file + " : " + file.exists());
 
@@ -42,25 +41,21 @@ public class Uploader {
                     .build();
 
             OkHttpClient client = new OkHttpClient();
+
             Response response = client.newCall(request).execute();
+
             res = response.body().string();
-            Log.i(TAG, "res: " + res);
             res2 = res.split("\n");
-            res = res2[2];
-            return res;
+            return res2;
 
 
         } catch (UnknownHostException | UnsupportedEncodingException e) {
             Log.e(TAG, "Error: " + e.getLocalizedMessage());
-            return res;
+            return res2;
         } catch (Exception e) {
             Log.e(TAG, "Other Error: " + e.getLocalizedMessage());
-            return res;
+            return res2;
         }
-    }
-
-    public String getResults() {
-        return results;
     }
 }
 

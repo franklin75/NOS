@@ -24,7 +24,8 @@ import java.util.Date;
 public class UploadPhotoMenu extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    String mCurrentPhotoPath, name, result;
+    String mCurrentPhotoPath, name;
+    String[] result;
     String TAG = "TheTag";
     Uploader uploader;
     Context mContext;
@@ -44,7 +45,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
     public void goToResults(){
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);
-        intent.putExtra("result", result);
+        intent.putExtra("resultNums", result[1]);
+        intent.putExtra("resultAns", result[2]);
         startActivity(intent);
     }
 
@@ -59,7 +61,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         name = imageFileName;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        Log.i(TAG, storageDir.getPath() + imageFileName);
+
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -91,7 +93,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "Handling input...");
+
+        Log.i(TAG, "Starting Async thread...");
         handleInput();
     }
 
@@ -112,10 +115,10 @@ public class UploadPhotoMenu extends AppCompatActivity {
 
                 @Override
                 protected Boolean doInBackground(Void... params) {
-                    Log.i(TAG, "in background");
+                    Log.i(TAG, "Entering Uploader");
                     result = uploader.uploadFile(name, mCurrentPhotoPath);
-                    Log.i(TAG, "result: " + result);
 
+                    Log.i(TAG, "Result: " + result[2]);
                     if (result.equals(""))
                         return false;
                     else
@@ -128,6 +131,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     if (progressDialog != null)
                         progressDialog.dismiss();
 
+                    Log.i(TAG, "Entering Results Screen...");
                     goToResults();
 
                     if (aBoolean)

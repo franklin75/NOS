@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class ResultScreen extends AppCompatActivity {
 
-    TextView mTextView;
+    TextView mTextView, mTextView2;
     Context mContext;
     ImageView iView;
     Bitmap bitMap;
@@ -24,7 +24,9 @@ public class ResultScreen extends AppCompatActivity {
         setContentView(R.layout.activity_result_screen);
         mContext = getApplicationContext();
         mTextView = findViewById(R.id.text);
-        mTextView.setText(getIntent().getStringExtra("result"));
+        mTextView2 = findViewById(R.id.text2);
+        mTextView.setText(getIntent().getStringExtra("resultAns"));
+        mTextView2.setText(getIntent().getStringExtra("resultNums"));
         bitMap = BitmapFactory.decodeFile(getIntent().getStringExtra("photoPath"));
         iView = findViewById(R.id.imageView);
         iView.setImageBitmap(bitMap);
