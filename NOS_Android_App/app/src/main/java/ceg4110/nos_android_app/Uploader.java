@@ -18,13 +18,12 @@ import okhttp3.Response;
 public class Uploader {
 
     private String TAG = "TheTag", res = "", serverURL = "http://52.204.111.28";
-    private String results;
     private String[] res2;
     private File file;
 
     public String[] uploadFile(String name, String photoPath) {
         file = new File(photoPath);
-        Log.i(TAG, "File...::::" + file + " : " + file.exists());
+        Log.i(TAG, "File name: " + file + " ...File exists:  " + file.exists());
 
         final MediaType TYPE = MediaType.parse("image/*");
 
