@@ -1,11 +1,9 @@
 package ceg4110.nos_android_app;
 
 import android.util.Log;
-
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -13,13 +11,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 /**
  * Created by dan on 11/09/17.
  */
-
 public class Uploader {
 
-    private String TAG = "TheTag", results, res = "", serverURL = "http://52.204.111.28";
+    private String TAG = "TheTag", res = "", serverURL = "http://52.204.111.28";
+    private String results;
     private String[] res2;
     private File file;
 
