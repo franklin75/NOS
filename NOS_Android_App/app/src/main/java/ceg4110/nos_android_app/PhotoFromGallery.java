@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 public class PhotoFromGallery extends AppCompatActivity {
 
@@ -18,13 +20,13 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     private static final int readReqCode = 42;
     String TAG = "anotherTag";
+    ImageView image;
 
     public void findFile() {
-       // Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
+       // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
         startActivityForResult(intent, readReqCode);
 
     }
@@ -38,8 +40,18 @@ public class PhotoFromGallery extends AppCompatActivity {
             if (resultData != null) {
                 uri = resultData.getData();
                 Log.i(TAG, "Uri: " + uri.toString());
+
+                displayPhoto(uri);
             }
         }
+    }
 
+    public void displayPhoto(Uri uri) {
+        image = findViewById(R.id.imageView2);
+        image.setImageURI(uri);
+    }
+
+    public void onClickAssess(View view) {
+        //do the stuff to assess the image for food
     }
 }
