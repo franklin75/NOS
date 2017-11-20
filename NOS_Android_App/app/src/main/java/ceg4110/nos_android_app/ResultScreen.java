@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 
 public class ResultScreen extends AppCompatActivity {
 
@@ -28,6 +29,8 @@ public class ResultScreen extends AppCompatActivity {
         mTextView.setText(getIntent().getStringExtra("resultAns"));
         mTextView2.setText(getIntent().getStringExtra("resultNums"));
         bitMap = BitmapFactory.decodeFile(getIntent().getStringExtra("photoPath"));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitMap.compress(Bitmap.CompressFormat.JPEG, 75, stream);
         iView = findViewById(R.id.imageView);
         iView.setImageBitmap(bitMap);
     }

@@ -1,6 +1,10 @@
 package ceg4110.nos_android_app;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
@@ -23,7 +27,7 @@ public class Uploader {
 
     public String[] uploadFile(String name, String photoPath) {
         file = new File(photoPath);
-        Log.i(TAG, "File name: " + file + " ...File exists:  " + file.exists());
+        Log.i(TAG, "File...::::" + file + " : " + file.exists());
 
         final MediaType TYPE = MediaType.parse("image/*");
 
@@ -31,7 +35,7 @@ public class Uploader {
 
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
-                    .addFormDataPart("pic", name, RequestBody.create(TYPE, file))
+                    .addFormDataPart("pic", name, RequestBody.create(TYPE, bos.toByteArray()))
                     .build();
 
             Request request = new Request.Builder()
@@ -55,6 +59,10 @@ public class Uploader {
             Log.e(TAG, "Other Error: " + e.getLocalizedMessage());
             return res2;
         }
+    }
+
+    public String getResults() {
+        return results;
     }
 }
 

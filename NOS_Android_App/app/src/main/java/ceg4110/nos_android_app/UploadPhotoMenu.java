@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +17,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -29,6 +33,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
     String TAG = "TheTag";
     Uploader uploader;
     Context mContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        name = imageFileName;
+        name = imageFileName + ".jpg";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         File image = File.createTempFile(
@@ -97,6 +102,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
         Log.i(TAG, "Starting Async thread...");
         handleInput();
     }
+
 
     @SuppressLint("StaticFieldLeak")
     public void handleInput() {
