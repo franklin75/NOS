@@ -28,7 +28,7 @@ import java.util.Date;
 public class UploadPhotoMenu extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    String mCurrentPhotoPath, name;
+    String mCurrentPhotoPath, name, result1;
     String[] result;
     String TAG = "TheTag";
     Uploader uploader;
@@ -122,9 +122,10 @@ public class UploadPhotoMenu extends AppCompatActivity {
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     Log.i(TAG, "Entering Uploader");
-                    result = uploader.uploadFile(name, mCurrentPhotoPath);
+                    result1 = uploader.uploadFile(name, mCurrentPhotoPath);
+                    result = uploader.getAllResults();
 
-                    if (result.equals(""))
+                    if (result1.equals(""))
                         return false;
                     else
                         return true;

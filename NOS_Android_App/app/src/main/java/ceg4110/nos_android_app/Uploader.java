@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import okhttp3.MediaType;
+
+
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,9 +26,13 @@ public class Uploader {
     private String TAG = "TheTag", res = "", serverURL = "http://52.204.111.28";
     private String[] res2;
     private File file;
+    Bitmap bitMap;
 
-    public String[] uploadFile(String name, String photoPath) {
+    public String uploadFile(String name, String photoPath) {
         file = new File(photoPath);
+        bitMap = BitmapFactory.decodeFile(photoPath);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitMap.compress(Bitmap.CompressFormat.JPEG, 75, bos);
         Log.i(TAG, "File...::::" + file + " : " + file.exists());
 
         final MediaType TYPE = MediaType.parse("image/*");
@@ -49,20 +55,22 @@ public class Uploader {
 
             res = response.body().string();
             res2 = res.split("\n");
-            return res2;
+            return res;
 
 
         } catch (UnknownHostException | UnsupportedEncodingException e) {
             Log.e(TAG, "Error: " + e.getLocalizedMessage());
-            return res2;
+            return res;
         } catch (Exception e) {
             Log.e(TAG, "Other Error: " + e.getLocalizedMessage());
-            return res2;
+            return res;
         }
     }
 
     public String getResults() {
-        return results;
+        return res;
     }
+
+    public String[] getAllResults() { return res2; }
 }
 
