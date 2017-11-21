@@ -33,6 +33,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
     String TAG = "TheTag";
     Uploader uploader;
     Context mContext;
+    boolean uploaded = false;
 
 
     @Override
@@ -140,16 +141,24 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     Log.i(TAG, "Entering Results Screen...");
                     goToResults();
 
-                    if (aBoolean)
+                    if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
+                        uploaded = true;
+                    }
                     else {
                         Log.i(TAG, "Upload failed");
-                        Toast.makeText(getApplicationContext(), "Upload error!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
         } else {
             Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+        }
+
+        if(!uploaded) {
+            Intent intent = new Intent(this, PendingMenuFolder.class);
+            intent.putExtra("photoPath", mCurrentPhotoPath);
+            startActivity(intent);
         }
 
     }
