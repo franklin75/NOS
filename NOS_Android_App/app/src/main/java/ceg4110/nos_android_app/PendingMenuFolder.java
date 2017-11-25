@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 public class PendingMenuFolder extends AppCompatActivity {
 
-    String mCurrentPhotoPath;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,5 +1,6 @@
 package ceg4110.nos_android_app;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,9 +21,16 @@ import android.widget.Toast;
 import java.io.File;
 
 public class PhotoFromGallery extends AppCompatActivity {
+    private Context mContext;
+    private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/data/ceg4110.nos_android_app/files/Pictures";
+    String pPhotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+    private String[] result;
+
+    private final String PHOTO_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mContext = getApplicationContext();
         findFile();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_from_gallery);
@@ -49,22 +58,23 @@ public class PhotoFromGallery extends AppCompatActivity {
             if (resultData != null) {
                 uri = resultData.getData();
                 Log.i(TAG, "Uri: " + uri.toString());
+                Log.i(TAG, "directory? - " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
                 displayPhoto(uri);
             }
         }
     }
 
-    public void displayPhoto(Uri uri) { 
-        String path = uri.getPath();
-        Log.i(TAG, "Path: " + path);
+    public void displayPhoto(Uri uri) {
+        mCurrentPhotoPath = mCurrentPhotoPath1 + uri.getPath().substring(uri.getPath().lastIndexOf('/'));
+        Log.i(TAG, "filename: " + mCurrentPhotoPath);
         image = findViewById(R.id.imageView2);
         image.setImageURI(uri);
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void onClickAssess(View view) {
-        final String result1;
-        final String[] result;
+        final Uploader uploader = new Uploader();
         //do the stuff to assess the image for food
         if (((ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
             new AsyncTask<Void, Integer, Boolean>() {
@@ -74,7 +84,7 @@ public class PhotoFromGallery extends AppCompatActivity {
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
-                    progressDialog = new ProgressDialog(UploadPhotoMenu.this);
+                    progressDialog = new ProgressDialog(PhotoFromGallery.this);
                     progressDialog.setMessage("Assessing food content...");
                     progressDialog.show();
                 }
@@ -82,7 +92,7 @@ public class PhotoFromGallery extends AppCompatActivity {
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     Log.i(TAG, "Entering Uploader");
-                    result1 = uploader.uploadFile(name, mCurrentPhotoPath);
+                    result1 = uploader.uploadFile("picture", mCurrentPhotoPath);
                     result = uploader.getAllResults();
 
                     if (result1.equals(""))
@@ -97,7 +107,7 @@ public class PhotoFromGallery extends AppCompatActivity {
                     if (progressDialog != null)
                         progressDialog.dismiss();
 
-                    Log.i(TAG, "Entering Results Screen...");
+                    Log.i(TAG, "Entering Results Screen");
                     goToResults();
 
                     if (aBoolean) {
