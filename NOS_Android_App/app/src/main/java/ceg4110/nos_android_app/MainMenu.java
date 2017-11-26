@@ -3,6 +3,7 @@ package ceg4110.nos_android_app;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -10,17 +11,14 @@ import java.io.File;
 
 public class MainMenu extends AppCompatActivity {
 
+    String TAG = "tag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        File histDir = new File("/data/ceg4110.nos_android_app/files/History/");
-
-        if(!histDir.exists())
-        {
-             histDir.mkdir();
-        }
+        File test = new File("/data/data/ceg4110.nos_android_app/files/");
+        Log.i(TAG, "test " + test.isDirectory());
     }
 
     public void buttonToUploadPhoto(View view){

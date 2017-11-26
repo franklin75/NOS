@@ -36,8 +36,6 @@ public class UploadPhotoMenu extends AppCompatActivity {
     String TAG = "TheTag";
     Uploader uploader;
     Context mContext;
-   // Uri photoURI;
-
     String historyPath;
     File photoFile = null;
 
@@ -163,11 +161,13 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
 
+                        Intent intent = new Intent (mContext, HistoryFolderMenu.class);
 
-                        //intent.putExtra("photoPath", mCurrentPhotoPath);
-                        //intent.putExtra("resultNums", result[1]);
-                        //intent.putExtra("resultAns", result[2]);
+                        intent.putExtra("photoPath", mCurrentPhotoPath);
+                        intent.putExtra("resultNums", result[1]);
+                        intent.putExtra("resultAns", result[2]);
 
+                        startActivity(intent);
 
 
 
