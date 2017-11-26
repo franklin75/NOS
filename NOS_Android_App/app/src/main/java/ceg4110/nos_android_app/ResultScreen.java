@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,10 +30,11 @@ public class ResultScreen extends AppCompatActivity {
         mTextView.setText(getIntent().getStringExtra("resultAns"));
         mTextView2.setText(getIntent().getStringExtra("resultNums"));
         bitMap = BitmapFactory.decodeFile(getIntent().getStringExtra("photoPath"));
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitMap.compress(Bitmap.CompressFormat.JPEG, 75, stream);
         iView = findViewById(R.id.imageView);
         iView.setImageBitmap(bitMap);
+        String bullshit = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+
+
     }
 
     public void buttonUploadMenu(View view){

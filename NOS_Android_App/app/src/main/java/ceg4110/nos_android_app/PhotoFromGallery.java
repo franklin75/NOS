@@ -24,6 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PhotoFromGallery extends AppCompatActivity {
+    private Context mContext;
+    private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/data/ceg4110.nos_android_app/files/Pictures";
+    String pPhotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+    private String[] result;
+
+    private final String PHOTO_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
     private static final int readReqCode = 42;
     String TAG = "anotherTag";
@@ -40,6 +46,7 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mContext = getApplicationContext();
         findFile();
         super.onCreate(savedInstanceState);
         mContext = getApplicationContext();
@@ -86,28 +93,11 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     }
 
-
-    public void goToResults(){
-        Intent intent = new Intent(this, ResultScreen.class);
-        intent.putExtra("photoPath", mCurrentPhotoPath);
-        intent.putExtra("resultNums", result[1]);
-        intent.putExtra("resultAns", result[2]);
-        startActivity(intent);
-    }
-
-    public void onClickAssess(View view) {
-        //do the stuff to assess the image for food
-        handleInput();
-       // goToResults();
-    }
-
-
-
-
-
     @SuppressLint("StaticFieldLeak")
-    public void handleInput() {
-        if (((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
+    public void onClickAssess(View view) {
+        final Uploader uploader = new Uploader();
+        //do the stuff to assess the image for food
+        if (((ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
             new AsyncTask<Void, Integer, Boolean>() {
 
                 ProgressDialog progressDialog;
@@ -123,8 +113,7 @@ public class PhotoFromGallery extends AppCompatActivity {
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     Log.i(TAG, "Entering Uploader");
-                    Log.i(TAG, "mCurrentPhotoPath again: " + mCurrentPhotoPath.toString());
-                    result1 = uploader.uploadFile(name, mCurrentPhotoPath);
+                    result1 = uploader.uploadFile("picture", mCurrentPhotoPath);
                     result = uploader.getAllResults();
 
                     if (result1.equals(""))
@@ -139,40 +128,32 @@ public class PhotoFromGallery extends AppCompatActivity {
                     if (progressDialog != null)
                         progressDialog.dismiss();
 
-                    Log.i(TAG, "Entering Results Screen...");
+                    Log.i(TAG, "Entering Results Screen");
                     goToResults();
 
                     if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
-
-                        Intent intent = new Intent (mContext, HistoryFolderMenu.class);
-
-                        intent.putExtra("photoPath", mCurrentPhotoPath);
-                        intent.putExtra("resultNums", result[1]);
-                        intent.putExtra("resultAns", result[2]);
-
-                        startActivity(intent);
-
-
-
                     }
                     else {
                         Log.i(TAG, "Upload failed");
                         Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(mContext, PendingMenuFolder.class);
                         intent.putExtra("photoPath", mCurrentPhotoPath);
-                        startActivityForResult(intent, 3);
-
+                        startActivity(intent);
 
                     }
-
                 }
             }.execute();
         } else {
             Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
         }
+    }
 
-
-
+    public void goToResults(){
+        Intent intent = new Intent(this, ResultScreen.class);
+        intent.putExtra("photoPath", mCurrentPhotoPath);
+        intent.putExtra("resultNums", result[1]);
+        intent.putExtra("resultAns", result[2]);
+        startActivity(intent);
     }
 }
