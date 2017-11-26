@@ -5,13 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.io.File;
+
 
 public class MainMenu extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        File histDir = new File("/data/ceg4110.nos_android_app/files/History/");
+
+        if(!histDir.exists())
+        {
+             histDir.mkdir();
+        }
     }
 
     public void buttonToUploadPhoto(View view){
@@ -20,6 +29,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void buttonToHistoryFolder(View view){
+
         Intent intent = new Intent(this, HistoryFolderMenu.class);
         startActivity(intent);
     }

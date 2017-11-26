@@ -36,7 +36,7 @@ public class ResultScreen extends AppCompatActivity {
     }
 
     public void buttonUploadMenu(View view){
-        Intent intent = new Intent(this, UploadPhotoMenu.class);
+        Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
 }

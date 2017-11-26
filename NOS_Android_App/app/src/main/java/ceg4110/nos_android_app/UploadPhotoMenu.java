@@ -20,7 +20,10 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,6 +36,10 @@ public class UploadPhotoMenu extends AppCompatActivity {
     String TAG = "TheTag";
     Uploader uploader;
     Context mContext;
+   // Uri photoURI;
+
+    String historyPath;
+    File photoFile = null;
 
 
     @Override
@@ -40,6 +47,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo_menu);
         mContext = getApplicationContext();
+        historyPath = "/data/ceg4110.nos_android_app/files/History/";
     }
 
     public void buttonToTakePhoto(View view) {
@@ -81,7 +89,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
+
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
@@ -99,9 +107,21 @@ public class UploadPhotoMenu extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.i(TAG, "Starting Async thread...");
-        handleInput();
+        if(requestCode == REQUEST_IMAGE_CAPTURE) {
+            Log.i(TAG, "Starting Async thread...");
+            handleInput();
+        }
+        else if(requestCode == 2)
+        {
+
+        }
+        else if(requestCode == 3)
+        {
+
+        }
     }
+
+
 
 
     @SuppressLint("StaticFieldLeak")
@@ -142,15 +162,26 @@ public class UploadPhotoMenu extends AppCompatActivity {
 
                     if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
+
+
+                        //intent.putExtra("photoPath", mCurrentPhotoPath);
+                        //intent.putExtra("resultNums", result[1]);
+                        //intent.putExtra("resultAns", result[2]);
+
+
+
+
                     }
                     else {
                         Log.i(TAG, "Upload failed");
                         Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(mContext, PendingMenuFolder.class);
                         intent.putExtra("photoPath", mCurrentPhotoPath);
-                        startActivity(intent);
+                        startActivityForResult(intent, 3);
+
 
                     }
+
                 }
             }.execute();
         } else {
