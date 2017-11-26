@@ -44,7 +44,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
     Context mContext;
     private Hashtable<String, String> results;
     File dict;
-    FileOutputStream outputStream, os;
+    FileOutputStream outputStream;
 
     File photoFile = null;
 
@@ -54,18 +54,15 @@ public class UploadPhotoMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo_menu);
 
-        try {
-            outputStream = openFileOutput("/data/ceg4110.nos_android_app/files/History/dict", Context.MODE_PRIVATE);
-        } catch (IOException e){
-            Log.e(TAG, "Cannot open dictionary file");
-        }
+        results = new Hashtable<>();
         mContext = getApplicationContext();
-        dict = new File("/data/ceg4110.nos_android_app/files/History/dict");
+        dict = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
         if (dict.exists()) {
             StringBuilder in = new StringBuilder();
             try {
                 BufferedReader br = new BufferedReader(new FileReader(dict));
                 String line;
+                outputStream = new FileOutputStream(dict, true);
 
                 while ((line = br.readLine()) != null) {
                     results.put(line, br.readLine());
@@ -76,9 +73,14 @@ public class UploadPhotoMenu extends AppCompatActivity {
             }
 
         }
-        else
-            results = new Hashtable<>();
-
+        else {
+            try {
+                dict.createNewFile();
+                outputStream = new FileOutputStream(dict, true);
+            } catch (Exception e) {
+                Log.e(TAG, "dict problem: " + e.getLocalizedMessage());
+            }
+        }
     }
 
     public void buttonToTakePhoto(View view) {
@@ -130,6 +132,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
+            else
+                Log.i(TAG, "photofile is null");
         }
     }
 
@@ -187,73 +191,156 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     Log.i(TAG, "Entering Results Screen...");
                     goToResults();
 
-                    if (aBoolean) {
-                        Log.i(TAG, "Upload succeeded");
-                        try {
-                            byte[] buffer = new byte[2048];
-                            FileInputStream input;
-                            FileOutputStream output;
-                            int BUFFER_SIZE = 2048;
+                    if (aBoolean)
+                        movePhoto("History");
+                     else
+                        movePhoto("Pending");
 
-                            input = new FileInputStream(photoFile);
-                            output = new FileOutputStream("/data/ceg4110.nos_android_app/files/History/" + mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')));
-
-                            BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
-                            BufferedOutputStream out = new BufferedOutputStream(output, BUFFER_SIZE);
-                            int count = 0, n = 0;
-                            try {
-                                while ((n = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
-                                    out.write(buffer, 0, n);
-                                    count += n;
-                                }
-                                out.flush();
-                            } catch (FileNotFoundException exx) {
-                                Log.e(TAG, "can't find file(s)");
-                            } finally {
-                                try {
-                                    out.close();
-                                } catch (IOException e) {
-                                    Log.e(TAG, "hate 1");
-                                }
-                                try {
-                                    in.close();
-                                } catch (IOException e) {
-                                    Log.e(TAG, "hate 2");
-                                }
-                            }
-
-                        } catch (Exception e) {
-
-                        }
-
-                        Intent intent = new Intent(mContext, HistoryFolderMenu.class);
-                        results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
-                        try {
-                            outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')) + "\n").getBytes());
-                            outputStream.write((result[1] + " " + result[2] + "\n").getBytes());
-                        } catch (IOException ex) {
-                            Log.e(TAG, "Cannot write to dictionary file");
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error: " + e.getLocalizedMessage());
-                        }
-                        intent.putExtra("photoPath", mCurrentPhotoPath);
-                        intent.putExtra("resultNums", result[1]);
-                        intent.putExtra("resultAns", result[2]);
-                        startActivityForResult(intent, 2);
-
-                    }
-                    else {
-                        Log.i(TAG, "Upload failed");
-                        Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(mContext, PendingMenuFolder.class);
-                        intent.putExtra("photoPath", mCurrentPhotoPath);
-                        startActivityForResult(intent, 3);
-                    }
 
                 }
             }.execute();
         } else {
-            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No Internet Connection, putting photo in Pending folder", Toast.LENGTH_LONG).show();
+            movePhoto("Pending");
+        }
+    }
+
+    protected void movePhoto(String folder) {
+        if (folder.equals("Pending")) {
+
+            Log.i(TAG, "Upload failed");
+            try {
+                byte[] buffer = new byte[2048];
+                FileInputStream input;
+                FileOutputStream output;
+                int BUFFER_SIZE = 2048;
+                File dest = null;
+                boolean created = false;
+
+                try {
+                    dest = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pending/" + mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')));
+                    if(!dest.exists()) {
+                        Log.i(TAG, "dest didn't exist, creating...");
+                        created = dest.createNewFile();
+                    } else
+                        Log.i(TAG, "oops, line 220");
+
+                } catch (Exception ex) {
+                    Log.e(TAG, "Hate 4 " + ex.getLocalizedMessage());
+                }
+
+                input = new FileInputStream(photoFile);
+                output = new FileOutputStream(dest);
+                Log.i(TAG, "created? " + created);
+
+                BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
+                BufferedOutputStream out = new BufferedOutputStream(output, BUFFER_SIZE);
+                int count = 0, n = 0;
+                try {
+                    while ((n = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
+                        out.write(buffer, 0, n);
+                    }
+                    Log.i(TAG, "file copied over...?");
+                    out.flush();
+                    Log.i(TAG, "size of dest: " + dest.length());
+                    Log.i(TAG, "location of dest: " + dest.getAbsolutePath());
+                } catch (FileNotFoundException exx) {
+                    Log.e(TAG, "can't find file(s)");
+                } finally {
+                    try {
+                        out.close();
+                        Log.i(TAG, "out closed");
+                    } catch (IOException e) {
+                        Log.e(TAG, "hate 1");
+                    }
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        Log.e(TAG, "hate 2");
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "hate 3, " + e.getLocalizedMessage());
+            }
+
+            Toast.makeText(getApplicationContext(), "Upload error! Moved photo to Pending folder", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(mContext, PendingMenuFolder.class);
+            intent.putExtra("photoPath", mCurrentPhotoPath);
+            startActivityForResult(intent, 3);
+
+        } else if (folder.equals("History")) {
+            Log.i(TAG, "Upload succeeded");
+            try {
+                byte[] buffer = new byte[2048];
+                FileInputStream input;
+                FileOutputStream output;
+                int BUFFER_SIZE = 2048;
+                File dest = null;
+                boolean created = false;
+
+                try {
+                    dest = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/" + mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')));
+                    if(!dest.exists()) {
+                        Log.i(TAG, "dest didn't exist, creating...");
+                        created = dest.createNewFile();
+                    } else
+                        Log.i(TAG, "oops, line 220");
+
+                } catch (Exception ex) {
+                    Log.e(TAG, "Hate 4 " + ex.getLocalizedMessage());
+                }
+
+                input = new FileInputStream(photoFile);
+                output = new FileOutputStream(dest);
+                Log.i(TAG, "created? " + created);
+
+                BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
+                BufferedOutputStream out = new BufferedOutputStream(output, BUFFER_SIZE);
+                int count = 0, n = 0;
+                try {
+                    while ((n = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
+                        out.write(buffer, 0, n);
+                    }
+                    Log.i(TAG, "file copied over...?");
+                    out.flush();
+                    Log.i(TAG, "size of dest: " + dest.length());
+                    Log.i(TAG, "location of dest: " + dest.getAbsolutePath());
+                } catch (FileNotFoundException exx) {
+                    Log.e(TAG, "can't find file(s)");
+                } finally {
+                    try {
+                        out.close();
+                        Log.i(TAG, "out closed");
+                    } catch (IOException e) {
+                        Log.e(TAG, "hate 1");
+                    }
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        Log.e(TAG, "hate 2");
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "hate 3, " + e.getLocalizedMessage());
+            }
+
+            Intent intent = new Intent(mContext, HistoryFolderMenu.class);
+            results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
+            try {
+                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1) + "\n").getBytes());
+                Log.i(TAG, "past path, writing results");
+                outputStream.write((result[1] + " " + result[2] + "\n").getBytes());
+            } catch (IOException ex) {
+                Log.e(TAG, "Cannot write to dictionary file");
+            } catch (Exception e) {
+                Log.e(TAG, "Error with dict: " + e.getLocalizedMessage());
+            }
+            intent.putExtra("photoPath", mCurrentPhotoPath);
+            intent.putExtra("resultNums", result[1]);
+            intent.putExtra("resultAns", result[2]);
+            startActivityForResult(intent, 2);
         }
     }
 
