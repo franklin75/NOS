@@ -6,17 +6,113 @@
     android:layout_height="match_parent"
     tools:context="ceg4110.nos_android_app.Tutorial">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:layout_width="368dp"
+        android:layout_height="495dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="In Tutorial"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Take Photo To Upload"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView38"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The NOS app allows you to take a photo within the app and submit it to the SeeFood AI. If you wish to take a photo and submit it to the SeeFood AI:" />
+
+            <TextView
+                android:id="@+id/textView39"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From the Main Menu, select Upload Photo. From the Upload Menu, select Take A Photo. The camera will open. Take a photo. When satisfied with your photo, select the check mark. The photo will be assessed and your results will appear." />
+
+            <TextView
+                android:id="@+id/textView50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload From Gallery"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView49"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The NOS app allows you to select a photo from your photo gallery and submit it to the AI. If you wish to submit a photo from to the AI from your gallery:" />
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From the Main Menu, select Upload Photo. From the Upload Menu, select Photo From Gallery. Select the photo you wish to assess.  When you are satisfied with your photo selection, click Assess. The photo will be assessed and your results will appear." />
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resubmit From Pending"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView46"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The NOS app saves images that fail to upload to hte AI to the Pending Folder. If you wish to resubmit a photo that has experienced a failed upload:" />
+
+            <TextView
+                android:id="@+id/textView45"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From the Main Menu, select Pending.  The pending page will open and show all photos whose uploads have failed. Select the photo you wish to resubmit. When you are satisfied with your photo selection, click Assess. The photo will be assessed and your results will appear." />
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resubmit from History"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The NOS app saves successfully uploaded images to the History Folder. If you wish to view the results of a successfully uploaded image:" />
+
+            <TextView
+                android:id="@+id/textView42"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From the Main Menu, select History. The history page will open and show all the photos whose uploads have succeeded. Select the photo whose results you wish to view. The photo's results will be displayed." />
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="If you wish to resubmit a successfully uploaded image:" />
+
+            <TextView
+                android:id="@+id/textView40"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From the Main Menu, select History. The history page will open and show all the photos whose uploads have succeeded. Select the photo whose results you wish to view. When you are satisfied with your photo selection, click assess. The photo will be assessed and your results will appear." />
+
+        </LinearLayout>
+
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
