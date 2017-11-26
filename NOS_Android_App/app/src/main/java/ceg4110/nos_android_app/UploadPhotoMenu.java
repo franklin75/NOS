@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,6 +35,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
     String TAG = "TheTag";
     Uploader uploader;
     Context mContext;
+    File photoFile = null;
 
 
     @Override
@@ -81,14 +84,14 @@ public class UploadPhotoMenu extends AppCompatActivity {
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
+
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 //error
             }
             if(photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "ceg4110.nos_android_app.fileprovider", photoFile);
+               Uri photoURI = FileProvider.getUriForFile(this, "ceg4110.nos_android_app.fileprovider", photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
@@ -149,15 +152,11 @@ public class UploadPhotoMenu extends AppCompatActivity {
                         Intent intent = new Intent(mContext, PendingMenuFolder.class);
                         intent.putExtra("photoPath", mCurrentPhotoPath);
                         startActivity(intent);
-
                     }
                 }
             }.execute();
         } else {
             Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
         }
-
-
-
     }
 }
