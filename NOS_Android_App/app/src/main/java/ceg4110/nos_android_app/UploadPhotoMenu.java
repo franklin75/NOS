@@ -93,7 +93,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
         intent.putExtra("photoPath", mCurrentPhotoPath);
         intent.putExtra("resultNums", result[1]);
         intent.putExtra("resultAns", result[2]);
-        startActivity(intent);
+        startActivityForResult(intent, 4);
     }
 
     public void buttonToPhotoFromGallery(View view){
@@ -145,12 +145,20 @@ public class UploadPhotoMenu extends AppCompatActivity {
             Log.i(TAG, "Starting Async thread...");
             handleInput();
         }
-        else if(requestCode == 2) { // if going to history
+        else if(requestCode == 2) { // if coming from history
 
         }
 
-        else if(requestCode == 3) { // if going to pending
+        else if(requestCode == 3) { // if coming from pending
 
+        }
+
+        else if(requestCode == 4) { // if coming from goToResults(), then go to history
+            Intent intent = new Intent(mContext, HistoryFolderMenu.class);
+            intent.putExtra("photoPath", getIntent().getStringExtra("photoPath"));
+            intent.putExtra("resultNums", getIntent().getStringExtra("resultnNums"));
+            intent.putExtra("resultAns", getIntent().getStringExtra("resultAns"));
+            startActivityForResult(intent, 2);
         }
     }
 
@@ -188,12 +196,11 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     if (progressDialog != null)
                         progressDialog.dismiss();
 
-                    Log.i(TAG, "Entering Results Screen...");
-                    goToResults();
-
-                    if (aBoolean)
+                    if (aBoolean) {
                         movePhoto("History");
-                     else
+                        Log.i(TAG, "Entering Results Screen...");
+                        goToResults();
+                    } else
                         movePhoto("Pending");
 
 
@@ -326,7 +333,6 @@ public class UploadPhotoMenu extends AppCompatActivity {
                 Log.e(TAG, "hate 3, " + e.getLocalizedMessage());
             }
 
-            Intent intent = new Intent(mContext, HistoryFolderMenu.class);
             results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
             try {
                 outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1) + "\n").getBytes());
@@ -337,10 +343,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(TAG, "Error with dict: " + e.getLocalizedMessage());
             }
-            intent.putExtra("photoPath", mCurrentPhotoPath);
-            intent.putExtra("resultNums", result[1]);
-            intent.putExtra("resultAns", result[2]);
-            startActivityForResult(intent, 2);
+            goToResults();
         }
     }
 
