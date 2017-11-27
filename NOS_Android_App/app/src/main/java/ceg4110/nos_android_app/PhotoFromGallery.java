@@ -22,7 +22,7 @@ import java.io.File;
 
 public class PhotoFromGallery extends AppCompatActivity {
     private Context mContext;
-    private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/data/ceg4110.nos_android_app/files/Pictures";
+    private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pictures";
     String pPhotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
     private String[] result;
 
@@ -58,7 +58,6 @@ public class PhotoFromGallery extends AppCompatActivity {
             if (resultData != null) {
                 uri = resultData.getData();
                 Log.i(TAG, "Uri: " + uri.toString());
-                Log.i(TAG, "directory? - " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
                 displayPhoto(uri);
             }
         }

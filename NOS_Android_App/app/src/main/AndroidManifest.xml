@@ -26,7 +26,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".UploadPhotoMenu" />
-        <activity android:name=".HistoryFolderMenu" />
+        <activity android:name=".HistoryFolderMenu" >
+            <intent-filter>
+                <action android:name="ceg4110.nos_android_app.HistoryFolderMenu" />
+                    <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".PendingMenuFolder" />
         <activity android:name=".AboutMenu" />
         <activity android:name=".Tutorial" />

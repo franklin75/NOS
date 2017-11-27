@@ -2,8 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <paths xmlns:android="http://schemas.android.com/apk/res/android">
         <external-path name="my_images" path="Android/data/ceg4110.nos_android_app/files/Pictures" />
-        <files-path name="history" path="Android/data/ceg4110.nos_android_app/files/History"/>
-        <files-path name="pending" path="Android/data/ceg4110.nos_android_app/files/Pending"/>
+        <external-path name="history" path="Android/data/ceg4110.nos_android_app/files/History" />
+        <external-path name="pending" path="Android/data/ceg4110.nos_android_app/files/Pending" />
 
     </paths>
 </PreferenceScreen>

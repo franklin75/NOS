@@ -17,10 +17,6 @@ public class MainMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!(pendingDir.exists())) {
-            pendingDir.mkdir();
-        }
-
         setContentView(R.layout.activity_main_menu);
 
         File pending = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pending");
