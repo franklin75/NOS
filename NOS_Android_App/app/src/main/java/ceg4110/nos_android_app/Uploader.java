@@ -30,7 +30,8 @@ public class Uploader {
 
     public String uploadFile(String name, String photoPath) {
         file = new File(photoPath);
-        Log.i(TAG, "File...::::" + file + " : " + file.exists());
+        Log.i(TAG, "1111path: " + photoPath);
+        Log.i(TAG, "exists: " + file.exists());
         bitMap = BitmapFactory.decodeFile(photoPath);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitMap.compress(Bitmap.CompressFormat.JPEG, 75, bos);

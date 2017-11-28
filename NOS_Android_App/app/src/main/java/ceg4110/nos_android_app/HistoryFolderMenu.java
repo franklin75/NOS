@@ -1,12 +1,16 @@
 package ceg4110.nos_android_app;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,18 +18,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 public class HistoryFolderMenu extends AppCompatActivity {
 
-    private String result1, mCurrentPhotoPath, TAG = "TheTag";
+    private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History";
+    String TAG = "TheTag";
+    File dict;
     private String[] result;
     Context mContext;
-    File dict;
-    Uri uri;
+    private static final int readReqCode = 42;
     ImageView image;
 
     @Override
@@ -36,26 +38,47 @@ public class HistoryFolderMenu extends AppCompatActivity {
         mContext = getApplicationContext();
         if (getIntent().hasExtra("photoPath"))
             mCurrentPhotoPath = getIntent().getStringExtra("photoPath");
-        displayPhotos();
+        historyFile();
     }
 
     //display shit goes here
 
-    public void displayPhotos() {
 
-        //image = findViewById(R.id.imageView2);
-       // image.setImageURI(uri);
-       // File directory = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
-        //File[] files = directory.listFiles();
-        //Log.i(TAG, "Size: "+ files.length);
-       // for (int i = 0; i < files.length; i++)
-       // {
-       //     Log.i(TAG, "FileName:" + files[i].getName());
-       // }
-        //dict.listFiles();
-        Log.i(TAG, "in displayPhotos");
+    public void historyFile() {
 
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
+        intent.setType("image/*");                          //we want images, so set for only that type
+        // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
+        startActivityForResult(intent, readReqCode);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+
+        Uri uri;
+        if (requestCode == readReqCode && resultCode == Activity.RESULT_OK) {
+
+            if (resultData != null) {
+                uri = resultData.getData();
+                displayPhoto(uri);
+            }
+        }
+    }
+
+    public void displayPhoto(Uri uri) {
+        mCurrentPhotoPath = mCurrentPhotoPath1 + uri.getPath().substring(uri.getPath().lastIndexOf('/'));
+        Log.i(TAG, "filename: " + mCurrentPhotoPath);
+        image = findViewById(R.id.imageView3);
+        image.setImageURI(uri);
+
+    }
+
+    public void onClickDelete(View view) {
+        File toDelete = new File(mCurrentPhotoPath);
+        toDelete.delete();
+        Intent intent = new Intent(this, HistoryFolderMenu.class);
+        startActivity(intent);
     }
 
     //upload shit
@@ -95,14 +118,16 @@ public class HistoryFolderMenu extends AppCompatActivity {
                         progressDialog.dismiss();
 
                     Log.i(TAG, "Entering Results Screen");
-                    goToResults();
+
 
                     if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
+                        goToResults();
+                        //update dict
                     }
                     else {
                         Log.i(TAG, "Upload failed");
-                        Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Upload error! Try again later.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(mContext, PendingMenuFolder.class);
                         intent.putExtra("photoPath", mCurrentPhotoPath);
                         startActivity(intent);
@@ -123,7 +148,7 @@ public class HistoryFolderMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void buttonUploadMenu(View view){
+    public void onClickMainMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
