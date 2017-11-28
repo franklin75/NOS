@@ -22,4 +22,9 @@ public class AboutMenu extends AppCompatActivity {
         Intent intent = new Intent(this, ImageClassification.class);
         startActivity(intent);
     }
+
+    public void buttonUploadMenu(View view){
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+    }
 }

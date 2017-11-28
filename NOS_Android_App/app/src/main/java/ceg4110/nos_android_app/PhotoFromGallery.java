@@ -19,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PhotoFromGallery extends AppCompatActivity {
     private Context mContext;
@@ -28,18 +31,31 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     private final String PHOTO_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
+    private static final int readReqCode = 42;
+    String TAG = "anotherTag";
+    ImageView image;
+    String mCurrentPhotoPath, name, result1;
+    String[] result;
+    Uploader uploader;
+    Context mContext;
+    String pendingPath;
+    File photoFile = null;
+    Uri uri;
+    File path;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mContext = getApplicationContext();
         Log.i(TAG, "Path: " + Environment.getExternalStorageDirectory());
         findFile();
         super.onCreate(savedInstanceState);
+        mContext = getApplicationContext();
         setContentView(R.layout.activity_photo_from_gallery);
+        uploader = new Uploader();
     }
 
-    private static final int readReqCode = 42;
-    String TAG = "anotherTag";
-    ImageView image;
+
 
     public void findFile() {
        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -53,7 +69,7 @@ public class PhotoFromGallery extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
-        Uri uri;
+       // Uri uri;
         if (requestCode == readReqCode && resultCode == Activity.RESULT_OK) {
 
             if (resultData != null) {
@@ -64,11 +80,11 @@ public class PhotoFromGallery extends AppCompatActivity {
         }
     }
 
-    public void displayPhoto(Uri uri) {
-        mCurrentPhotoPath = mCurrentPhotoPath1 + uri.getPath().substring(uri.getPath().lastIndexOf('/'));
-        Log.i(TAG, "filename: " + mCurrentPhotoPath);
+    public void displayPhoto() {
+
         image = findViewById(R.id.imageView2);
         image.setImageURI(uri);
+
 
     }
 

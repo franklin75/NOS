@@ -164,6 +164,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
     }
 
 
+
+
     @SuppressLint("StaticFieldLeak")
     public void handleInput() {
         if (((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {

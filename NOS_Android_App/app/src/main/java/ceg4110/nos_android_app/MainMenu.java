@@ -43,6 +43,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void buttonToHistoryFolder(View view){
+
         Intent intent = new Intent(this, HistoryFolderMenu.class);
         startActivity(intent);
     }
