@@ -5,11 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -22,19 +24,39 @@ public class HistoryFolderMenu extends AppCompatActivity {
     private String result1, mCurrentPhotoPath, TAG = "TheTag";
     private String[] result;
     Context mContext;
+    File dict;
+    Uri uri;
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_folder_menu);
+        dict = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
         mContext = getApplicationContext();
         if (getIntent().hasExtra("photoPath"))
             mCurrentPhotoPath = getIntent().getStringExtra("photoPath");
+        displayPhotos();
     }
 
-    //save photo to history folder shit goes here
-
     //display shit goes here
+
+    public void displayPhotos() {
+
+        //image = findViewById(R.id.imageView2);
+       // image.setImageURI(uri);
+       // File directory = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
+        //File[] files = directory.listFiles();
+        //Log.i(TAG, "Size: "+ files.length);
+       // for (int i = 0; i < files.length; i++)
+       // {
+       //     Log.i(TAG, "FileName:" + files[i].getName());
+       // }
+        //dict.listFiles();
+        Log.i(TAG, "in displayPhotos");
+
+
+    }
 
     //upload shit
     @SuppressLint("StaticFieldLeak")
@@ -98,6 +120,11 @@ public class HistoryFolderMenu extends AppCompatActivity {
         intent.putExtra("photoPath", mCurrentPhotoPath);
         intent.putExtra("resultNums", result[1]);
         intent.putExtra("resultAns", result[2]);
+        startActivity(intent);
+    }
+
+    public void buttonUploadMenu(View view){
+        Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
 }
