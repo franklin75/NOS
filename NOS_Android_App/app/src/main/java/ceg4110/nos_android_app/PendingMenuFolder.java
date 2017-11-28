@@ -32,10 +32,12 @@ public class PendingMenuFolder extends AppCompatActivity {
     private String[] result;
     Context mContext;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_menu_folder);
+
         if (getIntent().hasExtra("photoPath")) {
             mCurrentPhotoPath = getIntent().getStringExtra("photoPath");
         historyFile();

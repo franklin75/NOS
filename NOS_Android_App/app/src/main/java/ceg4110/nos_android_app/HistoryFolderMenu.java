@@ -33,13 +33,12 @@ public class HistoryFolderMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_folder_menu);
+        dict = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
         mContext = getApplicationContext();
         if (getIntent().hasExtra("photoPath"))
             mCurrentPhotoPath = getIntent().getStringExtra("photoPath");
         historyFile();
     }
-
-    //save photo to history folder shit goes here
 
     //display shit goes here
 
@@ -144,6 +143,11 @@ public class HistoryFolderMenu extends AppCompatActivity {
         intent.putExtra("photoPath", mCurrentPhotoPath);
         intent.putExtra("resultNums", result[1]);
         intent.putExtra("resultAns", result[2]);
+        startActivity(intent);
+    }
+
+    public void buttonUploadMenu(View view){
+        Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
 }
