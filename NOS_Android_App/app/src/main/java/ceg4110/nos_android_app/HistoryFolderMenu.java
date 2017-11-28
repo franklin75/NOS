@@ -24,6 +24,7 @@ public class HistoryFolderMenu extends AppCompatActivity {
 
     private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History";
     String TAG = "TheTag";
+    File dict;
     private String[] result;
     Context mContext;
     private static final int readReqCode = 42;
@@ -117,15 +118,16 @@ public class HistoryFolderMenu extends AppCompatActivity {
                         progressDialog.dismiss();
 
                     Log.i(TAG, "Entering Results Screen");
-                    goToResults();
+
 
                     if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
+                        goToResults();
                         //update dict
                     }
                     else {
                         Log.i(TAG, "Upload failed");
-                        Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Upload error! Try again later.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(mContext, PendingMenuFolder.class);
                         intent.putExtra("photoPath", mCurrentPhotoPath);
                         startActivity(intent);
@@ -146,7 +148,7 @@ public class HistoryFolderMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void buttonUploadMenu(View view){
+    public void onClickMainMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }

@@ -40,7 +40,10 @@ public class PendingMenuFolder extends AppCompatActivity {
 
         if (getIntent().hasExtra("photoPath")) {
             mCurrentPhotoPath = getIntent().getStringExtra("photoPath");
-        historyFile();
+        }
+
+        pendingFile();
+
     }
 
 
@@ -51,8 +54,14 @@ public class PendingMenuFolder extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onClickMainMenu(View view) {
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+    }
 
-        public void historyFile() {
+
+
+        public void pendingFile() {
 
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
