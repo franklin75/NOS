@@ -74,6 +74,13 @@ public class HistoryFolderMenu extends AppCompatActivity {
 
     }
 
+    public void onClickDelete(View view) {
+        File toDelete = new File(mCurrentPhotoPath);
+        toDelete.delete();
+        Intent intent = new Intent(this, HistoryFolderMenu.class);
+        startActivity(intent);
+    }
+
     //upload shit
     @SuppressLint("StaticFieldLeak")
     public void onClickAssess(View view) {

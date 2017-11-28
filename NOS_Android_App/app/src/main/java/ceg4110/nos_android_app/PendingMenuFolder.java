@@ -42,10 +42,12 @@ public class PendingMenuFolder extends AppCompatActivity {
     }
 
 
-
-        //save photo to history folder shit goes here
-
-        //display shit goes here
+    public void onClickDelete(View view) {
+        File toDelete = new File(mCurrentPhotoPath);
+        toDelete.delete();
+        Intent intent = new Intent(this, PendingMenuFolder.class);
+        startActivity(intent);
+    }
 
 
         public void historyFile() {
