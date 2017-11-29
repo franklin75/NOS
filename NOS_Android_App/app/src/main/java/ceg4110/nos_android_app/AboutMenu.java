@@ -7,6 +7,10 @@ import android.view.View;
 
 public class AboutMenu extends AppCompatActivity {
 
+    /*
+   References About activity xml page. All content is on the design and text page.
+    */
+
     @Override 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -50,6 +50,7 @@ public class PendingMenuFolder extends AppCompatActivity {
      * This method deleted the selected photo on selection of the delete button and
      * returns to the History folder.
      */
+
     public void onClickDelete(View view) {
         File toDelete = new File(mCurrentPhotoPath);
         toDelete.delete();
@@ -57,6 +58,9 @@ public class PendingMenuFolder extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
+    Initiates the main menu class
+     */
     public void onClickMainMenu(View view) {
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
@@ -67,6 +71,7 @@ public class PendingMenuFolder extends AppCompatActivity {
      * that can be opened are accessible. The intent is started and automatically
      * initiates onActivityResult.
      */
+
         public void pendingFile() {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
@@ -105,11 +110,16 @@ public class PendingMenuFolder extends AppCompatActivity {
 
         }
 
-        //upload
+       /*
+      This method is called when the "Assess" button is pressed. This method creates a new Uploader object that
+      sends the photo to the AI for assessment.
+       */
+
         @SuppressLint("StaticFieldLeak")
         public void onClickAssess(View view) {
+
             final Uploader uploader = new Uploader();
-            //do the stuff to assess the image for food
+
             if (((ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
                 new AsyncTask<Void, Integer, Boolean>() {
 
@@ -122,6 +132,11 @@ public class PendingMenuFolder extends AppCompatActivity {
                         progressDialog.setMessage("Assessing food content...");
                         progressDialog.show();
                     }
+
+                    /*
+                    Sends photo to AI by image source and image path.
+                    Gets back a string array from the uploader, holding the results.
+                    */
 
                     @Override
                     protected Boolean doInBackground(Void... params) {
@@ -138,6 +153,13 @@ public class PendingMenuFolder extends AppCompatActivity {
                             return true;
                     }
 
+                    /*
+                     Upon a successful assessment, this method takes the user to the results window.
+                     If not, it moves it to the Pending folder if there was an issue with the upload or assessment.
+                     It also shows the results of the upload (if successful) by redirecting the user
+                    to the results screen.
+                     */
+
                     @Override
                     protected void onPostExecute(Boolean aBoolean) {
                         super.onPostExecute(aBoolean);
@@ -152,7 +174,6 @@ public class PendingMenuFolder extends AppCompatActivity {
                         else {
                             Log.i(TAG, "Upload failed");
                             Toast.makeText(getApplicationContext(), "Upload error! Leaving photo in Pending folder", Toast.LENGTH_LONG).show();
-
                         }
                     }
                 }.execute();
@@ -161,7 +182,11 @@ public class PendingMenuFolder extends AppCompatActivity {
             }
         }
 
-        public void goToResults(String path){
+    /*
+     * This method initiates the results class and send the photo path and results to the class.
+     */
+
+    public void goToResults(String path){
             if (!path.equals("")) {
                 Intent intent = new Intent(this, ResultScreen.class);
                 intent.putExtra("photoPath", path);
@@ -172,6 +197,10 @@ public class PendingMenuFolder extends AppCompatActivity {
                 Log.e(TAG, "results path problem, line 135");
             }
         }
+
+            /*
+            This method moves a photo to its appropriate folder, depending on success or failure of the upload to the AI.
+             */
 
         private String movePhoto() {
             File photoFile = new File(mCurrentPhotoPath);
@@ -185,6 +214,7 @@ public class PendingMenuFolder extends AppCompatActivity {
                 File dest = null;
                 boolean created = false;
 
+                // moves the photo to history folder
                 try {
                     dest = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/" + mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')));
                     if(!dest.exists()) {
@@ -198,6 +228,7 @@ public class PendingMenuFolder extends AppCompatActivity {
                     Log.e(TAG, "Hate 4 " + ex.getLocalizedMessage());
                 }
 
+                // Read in photo path of pending photo and write it to the new file path
                 input = new FileInputStream(photoFile);
                 output = new FileOutputStream(dest);
                 Log.i(TAG, "created? " + created);

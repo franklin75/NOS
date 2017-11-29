@@ -19,6 +19,7 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        // History, pending, files, and dictionary paths for later picture writing and retrieval
         File pending = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pending");
         File history = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History");
         File dir = new File("/data/data/ceg4110.nos_android_app/files");
@@ -36,6 +37,10 @@ public class MainMenu extends AppCompatActivity {
         Log.i(TAG, "history size: " + history.length());
         Log.i(TAG, "writable? : " + history.canWrite());
     }
+
+    /*
+    Intents for all main menu buttons- upload a photo, go to History folder, go to Pending folder, and view the About page
+     */
 
     public void buttonToUploadPhoto(View view){
         Intent intent = new Intent(this, UploadPhotoMenu.class);
