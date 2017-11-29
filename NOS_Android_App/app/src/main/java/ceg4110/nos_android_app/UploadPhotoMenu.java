@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Dictionary;
@@ -83,11 +84,19 @@ public class UploadPhotoMenu extends AppCompatActivity {
         }
     }
 
+    /*
+     * This method initiates and instance of the uploader class
+     * and initiates the take photo method.
+     */
     public void buttonToTakePhoto(View view) {
         uploader = new Uploader();
         takePhoto();
     }
 
+
+    /*
+     * This method initiates the results class and send the photo path and results to the class.
+     */
     public void goToResults(){
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);
@@ -96,11 +105,18 @@ public class UploadPhotoMenu extends AppCompatActivity {
         startActivityForResult(intent, 4);
     }
 
+    /*
+     * This method initiates the PhotoFromGallery class on
+     * selection of the Photo From Gallery button.
+     */
     public void buttonToPhotoFromGallery(View view){
         Intent intent = new Intent(this, PhotoFromGallery.class);
         startActivity(intent);
     }
 
+    /*
+     * This method gives each image a unique name and places it in the pictures directory.
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -120,6 +136,10 @@ public class UploadPhotoMenu extends AppCompatActivity {
         return image;
     }
 
+    /*
+     * This method causes the phones camera app to open and calls createImageFile
+     * after an picture is taken. The photoURI is set and onActivityResult is initiated.
+     */
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null) {
@@ -129,7 +149,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
                 //error
             }
             if(photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "ceg4110.nos_android_app.fileprovider", photoFile);
+               Uri photoURI = FileProvider.getUriForFile(this, "ceg4110.nos_android_app.fileprovider", photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
@@ -138,6 +158,10 @@ public class UploadPhotoMenu extends AppCompatActivity {
         }
     }
 
+    /*
+     * This method initiates the handle input method. If the photo was
+     * successfully uploaded send the photo to History folder.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -162,6 +186,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
             startActivityForResult(intent, 2);
         }
     }
+
+
 
 
     @SuppressLint("StaticFieldLeak")

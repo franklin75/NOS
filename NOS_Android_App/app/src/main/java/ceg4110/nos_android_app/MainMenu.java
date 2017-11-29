@@ -22,7 +22,7 @@ public class MainMenu extends AppCompatActivity {
         File pending = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pending");
         File history = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History");
         File dir = new File("/data/data/ceg4110.nos_android_app/files");
-        File dict = new File("/data/data/ceg4110.nos_android_app/files/History/dict");
+        File dict = new File("/storage/emulated/0/Android//data/ceg4110.nos_android_app/files/History/dict");
         if (!history.exists())
             history.mkdir();
         if(!pending.exists())
@@ -43,6 +43,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void buttonToHistoryFolder(View view){
+
         Intent intent = new Intent(this, HistoryFolderMenu.class);
         startActivity(intent);
     }
