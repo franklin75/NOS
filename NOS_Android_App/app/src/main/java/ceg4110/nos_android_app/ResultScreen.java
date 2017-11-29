@@ -29,7 +29,7 @@ public class ResultScreen extends AppCompatActivity {
     File dict;
     FileOutputStream outputStream;
     private Hashtable<String, String> results;
-    String TAG = "TheTag", photoPath = "", name;
+    String TAG = "TheTag", photoPath = "", name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

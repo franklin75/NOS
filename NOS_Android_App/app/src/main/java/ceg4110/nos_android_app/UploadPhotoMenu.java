@@ -362,7 +362,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
 
             results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
             try {
-                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1) + "\n").getBytes());
+                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')) + "\n").getBytes());
                 Log.i(TAG, "past path, writing results");
                 outputStream.write((result[1] + " " + result[2] + "\n").getBytes());
             } catch (IOException ex) {
