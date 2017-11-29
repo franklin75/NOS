@@ -79,6 +79,9 @@ public class ResultScreen extends AppCompatActivity {
         }
     }
 
+    /*
+     * This method initiates the main menu class
+     */
     public void buttonMainMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
