@@ -36,6 +36,7 @@ import java.util.Hashtable;
 import static android.provider.DocumentsContract.EXTRA_INITIAL_URI;
 
 public class PhotoFromGallery extends AppCompatActivity {
+
     private Context mContext;
     private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pictures";
     String pPhotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
@@ -59,9 +60,13 @@ public class PhotoFromGallery extends AppCompatActivity {
     private Hashtable<String, String> results;
     File dict;
     FileOutputStream outputStream;
-
     File photoFile = null;
 
+
+    /*
+    The onCreate method creates a dictionary, hash table to store the results from previous uploads, and
+    uploader object.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +77,6 @@ public class PhotoFromGallery extends AppCompatActivity {
         mContext = getApplicationContext();
         setContentView(R.layout.activity_photo_from_gallery);
         uploader = new Uploader();
-
         results = new Hashtable<>();
         mContext = getApplicationContext();
         dict = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
@@ -123,6 +127,7 @@ public class PhotoFromGallery extends AppCompatActivity {
      * This method also gets the name and path of the image. Finally,
      * this method sends the photo to the history folder if it has been uploaded successfully.
      */
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
@@ -172,10 +177,16 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     }
 
+    /*
+    This method is called when the "Assess" button is pressed. This method creates a new Uploader object that
+    sends the photo to the AI for assessment.
+     */
+
     @SuppressLint("StaticFieldLeak")
     public void onClickAssess(View view) {
+
         final Uploader uploader = new Uploader();
-        //do the stuff to assess the image for food
+
         if (((ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
             new AsyncTask<Void, Integer, Boolean>() {
 
@@ -189,6 +200,10 @@ public class PhotoFromGallery extends AppCompatActivity {
                     progressDialog.show();
                 }
 
+                /*
+                Sends photo to AI by image source and image path.
+                Gets back a string array from the uploader, holding the results.
+                 */
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     Log.i(TAG, "Entering Uploader");
@@ -200,6 +215,14 @@ public class PhotoFromGallery extends AppCompatActivity {
                     else
                         return true;
                 }
+
+                /*
+                Moves photo to appropriate folder depending on the success of the upload.
+                Upon a successful assessment, this method moves the photo to the History folder.
+                If not, it moves it to the Pending folder if there was an issue with the upload or assessment.
+                It also shows the results of the upload (if successful) by redirecting the user
+                to the results screen.
+                 */
 
                 @Override
                 protected void onPostExecute(Boolean aBoolean) {
@@ -232,7 +255,15 @@ public class PhotoFromGallery extends AppCompatActivity {
         }
     }
 
+    /*
+    This method moves a photo to its appropriate folder, depending on success or failure of the upload to the AI.
+    It takes in a string value of the folder the photo should be moved to.
+     */
+
     protected void movePhoto(String folder) {
+
+
+        // send photo to pending folder
         if (folder.equals("Pending")) {
 
             Log.i(TAG, "Upload failed");
@@ -245,7 +276,9 @@ public class PhotoFromGallery extends AppCompatActivity {
                 boolean created = false;
 
                 try {
+                    // Pending folder file path
                     dest = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pending/" + mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')));
+
                     if(!dest.exists()) {
                         Log.i(TAG, "dest didn't exist, creating...");
                         created = dest.createNewFile();
@@ -256,8 +289,10 @@ public class PhotoFromGallery extends AppCompatActivity {
                     Log.e(TAG, "Hate 4 " + ex.getLocalizedMessage());
                 }
 
+                // Read in photo path of pending photo and write it to the new file path
                 input = new FileInputStream(photoFile);
                 output = new FileOutputStream(dest);
+
                 Log.i(TAG, "created? " + created);
 
                 BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
@@ -292,11 +327,16 @@ public class PhotoFromGallery extends AppCompatActivity {
             }
 
             Toast.makeText(getApplicationContext(), "Upload error! Moved photo to Pending folder", Toast.LENGTH_LONG).show();
+
+            // go to Pending folder
             Intent intent = new Intent(mContext, PendingMenuFolder.class);
             intent.putExtra("photoPath", mCurrentPhotoPath);
             startActivityForResult(intent, 3);
+        }
 
-        } else if (folder.equals("History")) {
+
+        // send photo to history folder
+        else if (folder.equals("History")) {
             Log.i(TAG, "Upload succeeded");
             try {
                 byte[] buffer = new byte[2048];
@@ -307,6 +347,8 @@ public class PhotoFromGallery extends AppCompatActivity {
                 boolean created = false;
 
                 try {
+
+                    // History folder file path
                     dest = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/" + mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')));
                     if(!dest.exists()) {
                         Log.i(TAG, "dest didn't exist, creating...");
@@ -318,6 +360,7 @@ public class PhotoFromGallery extends AppCompatActivity {
                     Log.e(TAG, "Hate 4 " + ex.getLocalizedMessage());
                 }
 
+                // Read in photo path of history photo and write it to the new file path
                 input = new FileInputStream(photoFile);
                 output = new FileOutputStream(dest);
                 Log.i(TAG, "created? " + created);
@@ -325,6 +368,7 @@ public class PhotoFromGallery extends AppCompatActivity {
                 BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
                 BufferedOutputStream out = new BufferedOutputStream(output, BUFFER_SIZE);
                 int count = 0, n = 0;
+
                 try {
                     while ((n = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
                         out.write(buffer, 0, n);
@@ -377,6 +421,10 @@ public class PhotoFromGallery extends AppCompatActivity {
         intent.putExtra("resultAns", result[2]);
         startActivityForResult(intent, 4);
     }
+
+    /*
+    This method closes the output stream.
+     */
 
     @Override
     protected void onDestroy() {

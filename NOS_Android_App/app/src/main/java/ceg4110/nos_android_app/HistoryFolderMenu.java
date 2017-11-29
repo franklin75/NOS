@@ -46,6 +46,7 @@ public class HistoryFolderMenu extends AppCompatActivity {
      * that can be opened are accessible. The intent is started and automatically
      * initiates onActivityResult.
      */
+
     public void historyFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
@@ -85,6 +86,7 @@ public class HistoryFolderMenu extends AppCompatActivity {
     /*
      * This method opens the results class on selection of the View Results button
      */
+
     public void onClickViewResults(View view) {
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);
@@ -102,11 +104,16 @@ public class HistoryFolderMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //upload
+    /*
+   This method is called when the "Assess" button is pressed. This method creates a new Uploader object that
+   sends the photo to the AI for assessment.
+    */
+
     @SuppressLint("StaticFieldLeak")
     public void onClickAssess(View view) {
+
         final Uploader uploader = new Uploader();
-        //do the stuff to assess the image for food
+
         if (((ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
             new AsyncTask<Void, Integer, Boolean>() {
 
@@ -120,6 +127,11 @@ public class HistoryFolderMenu extends AppCompatActivity {
                     progressDialog.show();
                 }
 
+                /*
+               Sends photo to AI by image source and image path.
+               Gets back a string array from the uploader, holding the results.
+                */
+
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     Log.i(TAG, "Entering Uploader");
@@ -132,6 +144,13 @@ public class HistoryFolderMenu extends AppCompatActivity {
                         return true;
                 }
 
+                /*
+               Upon a successful assessment, this method takes the user to the results window.
+               If not, it moves it to the Pending folder if there was an issue with the upload or assessment.
+               It also shows the results of the upload (if successful) by redirecting the user
+               to the results screen.
+                */
+
                 @Override
                 protected void onPostExecute(Boolean aBoolean) {
                     super.onPostExecute(aBoolean);
@@ -140,11 +159,9 @@ public class HistoryFolderMenu extends AppCompatActivity {
 
                     Log.i(TAG, "Entering Results Screen");
 
-
                     if (aBoolean) {
                         Log.i(TAG, "Upload succeeded");
                         goToResults();
-                        //update dict
                     }
                     else {
                         Log.i(TAG, "Upload failed");
@@ -164,6 +181,7 @@ public class HistoryFolderMenu extends AppCompatActivity {
     /*
      * This method initiates the results class and send the photo path and results to the class.
      */
+
     public void goToResults(){
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);
@@ -172,6 +190,9 @@ public class HistoryFolderMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
+    Initiates the main menu class.
+     */
 
     public void onClickMainMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);

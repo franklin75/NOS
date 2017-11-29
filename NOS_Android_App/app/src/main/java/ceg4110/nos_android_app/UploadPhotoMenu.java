@@ -162,6 +162,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
      * This method initiates the handle input method. If the photo was
      * successfully uploaded send the photo to History folder.
      */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
