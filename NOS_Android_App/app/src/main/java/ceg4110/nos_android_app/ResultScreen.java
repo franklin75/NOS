@@ -79,7 +79,7 @@ public class ResultScreen extends AppCompatActivity {
         }
     }
 
-    public void buttonUploadMenu(View view){
+    public void buttonMainMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }

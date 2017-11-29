@@ -60,7 +60,7 @@
                 android:id="@+id/textView48"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="From the Main Menu, select Upload Photo. From the Upload Menu, select Photo From Gallery. Select the photo you wish to assess.  When you are satisfied with your photo selection, click Assess. The photo will be assessed and your results will appear." />
+                android:text="From the Main Menu, select Upload Photo. From the Upload Menu, select Photo From Gallery. Naviagte to the Pictures folder. Select the photo you wish to assess.  When you are satisfied with your photo selection, click Assess. The photo will be assessed and your results will appear." />
 
             <TextView
                 android:id="@+id/textView47"
@@ -79,7 +79,7 @@
                 android:id="@+id/textView45"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="From the Main Menu, select Pending.  The pending page will open and show all photos whose uploads have failed. Select the photo you wish to resubmit. When you are satisfied with your photo selection, click Assess. The photo will be assessed and your results will appear." />
+                android:text="From the Main Menu, select Pending. Navigate to the Pending folder. The pending page will open and show all photos whose uploads have failed. Select the photo you wish to resubmit. When you are satisfied with your photo selection, click Assess. The photo will be assessed and your results will appear." />
 
             <TextView
                 android:id="@+id/textView44"
@@ -98,7 +98,7 @@
                 android:id="@+id/textView42"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="From the Main Menu, select History. The history page will open and show all the photos whose uploads have succeeded. Select the photo whose results you wish to view. The photo's results will be displayed." />
+                android:text="From the Main Menu, select History. Navigate to the History folder. The history page will open and show all the photos whose uploads have succeeded. Select the photo whose results you wish to view. The photo's results will be displayed." />
 
             <TextView
                 android:id="@+id/textView41"
@@ -110,7 +110,7 @@
                 android:id="@+id/textView40"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="From the Main Menu, select History. The history page will open and show all the photos whose uploads have succeeded. Select the photo whose results you wish to view. When you are satisfied with your photo selection, click assess. The photo will be assessed and your results will appear." />
+                android:text="From the Main Menu, select History. Navigate to the Pending folder. The history page will open and show all the photos whose uploads have succeeded. Select the photo whose results you wish to view. When you are satisfied with your photo selection, click assess. The photo will be assessed and your results will appear." />
 
         </LinearLayout>
 

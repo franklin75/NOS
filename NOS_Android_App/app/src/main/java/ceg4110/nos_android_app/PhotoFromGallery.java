@@ -103,33 +103,29 @@ public class PhotoFromGallery extends AppCompatActivity {
     }
 
 
-
+    /*
+     * The findFile method gets access to the Storage Access Framework only files
+     * that can be opened are accessible. The intent is started and automatically
+     * initiates onActivityResult.
+     */
 
     public void findFile() {
 
-        Uri uri = Uri.parse("content://com.android.externalstorage.documents/document/primary%3AAndroid%2Fdata%2Fceg4110.nos_android_app%2Ffiles%2Pictures%2");
-        Log.i(TAG, "Parsed URI: " + uri);
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.putExtra(Intent.EXTRA_ORIGINATING_URI, uri);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(EXTRA_INITIAL_URI, uri);
-        intent.setType("image/*");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
+        intent.setType("image/*");                          //we want images, so set for only that type
         startActivityForResult(intent, readReqCode);
 
-
-        /*
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-       intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
-       intent.setType("image/*");                          //we want images, so set for only that type
-       //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
-       startActivityForResult(intent, readReqCode);
-       */
     }
 
+    /*
+     * This method gets the URI of the photo selected.
+     * This method also gets the name and path of the image. Finally,
+     * this method sends the photo to the history folder if it has been uploaded successfully.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
-       // Uri uri;
         if (requestCode == readReqCode && resultCode == Activity.RESULT_OK) {
 
             if (resultData != null) {
@@ -162,6 +158,11 @@ public class PhotoFromGallery extends AppCompatActivity {
             }
 
     }
+
+    /*
+     * This method takes the URI set in onActivityResult and uses it to set the selected
+     * for viewing in image view.
+     */
 
     public void displayPhoto() {
 
@@ -366,7 +367,9 @@ public class PhotoFromGallery extends AppCompatActivity {
         }
     }
 
-
+    /*
+     * This method initiates the results class and send the photo path and results to the class.
+     */
     public void goToResults(){
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);
