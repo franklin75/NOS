@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 
+import static android.provider.DocumentsContract.EXTRA_INITIAL_URI;
+
 public class PhotoFromGallery extends AppCompatActivity {
     private Context mContext;
     private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pictures";
@@ -39,7 +43,7 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     private final String PHOTO_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
-    private static final int readReqCode = 42;
+    private static final int readReqCode = 41;
     String TAG = "anotherTag";
     ImageView image;
     //String mCurrentPhotoPath, name, result1;
@@ -99,21 +103,29 @@ public class PhotoFromGallery extends AppCompatActivity {
     }
 
 
-
+    /*
+     * The findFile method gets access to the Storage Access Framework only files
+     * that can be opened are accessible. The intent is started and automatically
+     * initiates onActivityResult.
+     */
 
     public void findFile() {
-       Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-       intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
         intent.setType("image/*");                          //we want images, so set for only that type
-       // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
         startActivityForResult(intent, readReqCode);
 
     }
 
+    /*
+     * This method gets the URI of the photo selected.
+     * This method also gets the name and path of the image. Finally,
+     * this method sends the photo to the history folder if it has been uploaded successfully.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
-       // Uri uri;
         if (requestCode == readReqCode && resultCode == Activity.RESULT_OK) {
 
             if (resultData != null) {
@@ -146,6 +158,11 @@ public class PhotoFromGallery extends AppCompatActivity {
             }
 
     }
+
+    /*
+     * This method takes the URI set in onActivityResult and uses it to set the selected
+     * for viewing in image view.
+     */
 
     public void displayPhoto() {
 
@@ -350,7 +367,9 @@ public class PhotoFromGallery extends AppCompatActivity {
         }
     }
 
-
+    /*
+     * This method initiates the results class and send the photo path and results to the class.
+     */
     public void goToResults(){
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);

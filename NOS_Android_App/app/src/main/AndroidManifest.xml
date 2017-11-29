@@ -36,8 +36,7 @@
         <activity android:name=".AboutMenu" />
         <activity android:name=".Tutorial" />
         <activity android:name=".ImageClassification" />
-        <activity android:name=".PhotoFromGallery" />
-
+        <activity android:name=".PhotoFromGallery"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="ceg4110.nos_android_app.fileprovider"

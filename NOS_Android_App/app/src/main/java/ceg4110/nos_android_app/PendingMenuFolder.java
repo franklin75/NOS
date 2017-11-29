@@ -46,7 +46,10 @@ public class PendingMenuFolder extends AppCompatActivity {
 
     }
 
-
+    /*
+     * This method deleted the selected photo on selection of the delete button and
+     * returns to the History folder.
+     */
     public void onClickDelete(View view) {
         File toDelete = new File(mCurrentPhotoPath);
         toDelete.delete();
@@ -59,17 +62,21 @@ public class PendingMenuFolder extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
+    /*
+     * This method gets access to the Storage Access Framework only files
+     * that can be opened are accessible. The intent is started and automatically
+     * initiates onActivityResult.
+     */
         public void pendingFile() {
-
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
             intent.setType("image/*");                          //we want images, so set for only that type
-            // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
             startActivityForResult(intent, readReqCode);
         }
 
+        /*
+         * This method gets the URI of the photo selected.
+         */
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
@@ -83,6 +90,10 @@ public class PendingMenuFolder extends AppCompatActivity {
             }
         }
 
+        /*
+         * This method takes the URI set in onActivityResult and uses it to set the selected
+         * for viewing in image view. It also gets the path of the image.
+         */
         public void displayPhoto(Uri uri) {
             mCurrentPhotoPath = mCurrentPhotoPath1 + uri.getPath().substring(uri.getPath().lastIndexOf('/'));
             Log.i(TAG, "filename: " + mCurrentPhotoPath);
@@ -94,7 +105,7 @@ public class PendingMenuFolder extends AppCompatActivity {
 
         }
 
-        //upload shit
+        //upload
         @SuppressLint("StaticFieldLeak")
         public void onClickAssess(View view) {
             final Uploader uploader = new Uploader();

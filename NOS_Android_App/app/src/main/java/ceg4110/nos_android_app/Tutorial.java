@@ -13,10 +13,4 @@ public class Tutorial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
     }
-
-    public void buttonUploadMenu(View view){
-        Intent intent = new Intent(this, MainMenu.class);
-        startActivity(intent);
-    }
-
 }

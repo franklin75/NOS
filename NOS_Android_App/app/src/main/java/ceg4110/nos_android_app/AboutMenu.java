@@ -13,17 +13,26 @@ public class AboutMenu extends AppCompatActivity {
         setContentView(R.layout.activity_about_menu);
     }
 
+    /*
+     * This method initiates the tutorial class
+     */
     public void buttonToTutorial(View view){
         Intent intent = new Intent(this, Tutorial.class);
         startActivity(intent);
     }
 
+    /*
+     * This method initiates the image classification class
+     */
     public void buttonToImageClassification(View view){
         Intent intent = new Intent(this, ImageClassification.class);
         startActivity(intent);
     }
 
-    public void buttonUploadMenu(View view){
+    /*
+     * This method initiates the main menu class
+     */
+    public void buttonMainMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
