@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 
+import static android.provider.DocumentsContract.EXTRA_INITIAL_URI;
+
 public class PhotoFromGallery extends AppCompatActivity {
     private Context mContext;
     private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pictures";
@@ -39,7 +43,7 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     private final String PHOTO_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
-    private static final int readReqCode = 42;
+    private static final int readReqCode = 41;
     String TAG = "anotherTag";
     ImageView image;
     //String mCurrentPhotoPath, name, result1;
@@ -102,12 +106,24 @@ public class PhotoFromGallery extends AppCompatActivity {
 
 
     public void findFile() {
-       Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-       intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
-        intent.setType("image/*");                          //we want images, so set for only that type
-       // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
+
+        Uri uri = Uri.parse("content://com.android.externalstorage.documents/document/primary%3AAndroid%2Fdata%2Fceg4110.nos_android_app%2Ffiles%2Pictures%2");
+        Log.i(TAG, "Parsed URI: " + uri);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.putExtra(Intent.EXTRA_ORIGINATING_URI, uri);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra(EXTRA_INITIAL_URI, uri);
+        intent.setType("image/*");
         startActivityForResult(intent, readReqCode);
 
+
+        /*
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+       intent.addCategory(Intent.CATEGORY_OPENABLE);       //only show files that can be opened
+       intent.setType("image/*");                          //we want images, so set for only that type
+       //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //lets you select multiple photos
+       startActivityForResult(intent, readReqCode);
+       */
     }
 
     @Override

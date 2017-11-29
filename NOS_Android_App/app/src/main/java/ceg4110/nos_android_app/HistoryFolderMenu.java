@@ -72,6 +72,13 @@ public class HistoryFolderMenu extends AppCompatActivity {
         image = findViewById(R.id.imageView3);
         image.setImageURI(uri);
 
+
+    }
+
+    public void onClickViewResults(View view) {
+        Intent intent = new Intent(this, ResultScreen.class);
+        intent.putExtra("photoPath", mCurrentPhotoPath);
+        startActivity(intent);
     }
 
     public void onClickDelete(View view) {
