@@ -17,20 +17,27 @@ import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Hashtable;
 
 public class PendingMenuFolder extends AppCompatActivity {
 
     private String result1, mCurrentPhotoPath, mCurrentPhotoPath1 = "/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/Pending";
-    private static final int readReqCode = 42;
+    private static final int readReqCode = 43;
     String TAG = "TheTag";
     ImageView image;
     private String[] result;
     Context mContext;
+    private Hashtable<String, String> results;
+    File dict;
+    FileOutputStream outputStream;
+    boolean wrong = false;
 
 
     @Override
@@ -40,6 +47,34 @@ public class PendingMenuFolder extends AppCompatActivity {
 
         if (getIntent().hasExtra("photoPath")) {
             mCurrentPhotoPath = getIntent().getStringExtra("photoPath");
+        }
+
+        results = new Hashtable<>();
+        mContext = getApplicationContext();
+        dict = new File("/storage/emulated/0/Android/data/ceg4110.nos_android_app/files/History/dict");
+        if (dict.exists()) {
+            StringBuilder in = new StringBuilder();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(dict));
+                String line;
+                outputStream = new FileOutputStream(dict, true);
+
+                while ((line = br.readLine()) != null) {
+                    results.put(line, br.readLine());
+                }
+                br.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error: " + e.getLocalizedMessage());
+            }
+
+        }
+        else {
+            try {
+                dict.createNewFile();
+                outputStream = new FileOutputStream(dict, true);
+            } catch (Exception e) {
+                Log.e(TAG, "dict problem: " + e.getLocalizedMessage());
+            }
         }
 
         pendingFile();
@@ -52,14 +87,21 @@ public class PendingMenuFolder extends AppCompatActivity {
      */
 
     public void onClickDelete(View view) {
-        File toDelete = new File(mCurrentPhotoPath);
-        toDelete.delete();
-        Intent intent = new Intent(this, PendingMenuFolder.class);
-        startActivity(intent);
+        if (mCurrentPhotoPath == null)
+            Toast.makeText(getApplicationContext(), "No photo selected!", Toast.LENGTH_LONG).show();
+        else {
+            File toDelete = new File(mCurrentPhotoPath);
+            if (!toDelete.exists())
+                Toast.makeText(getApplicationContext(), "Photo chosen from wrong directory!", Toast.LENGTH_LONG).show();
+            else {
+                toDelete.delete();
+                Intent intent = new Intent(this, PendingMenuFolder.class);
+                startActivity(intent);
+            }
+        }
     }
-
     /*
-    Initiates the main menu class
+     * Initiates main menu class
      */
     public void onClickMainMenu(View view) {
         Intent intent = new Intent(this, MainMenu.class);
@@ -110,11 +152,10 @@ public class PendingMenuFolder extends AppCompatActivity {
 
         }
 
-       /*
-      This method is called when the "Assess" button is pressed. This method creates a new Uploader object that
-      sends the photo to the AI for assessment.
-       */
-
+         /*
+          * This method is called when the assess button is pressed.
+          * This method creates a new Uploader object that sends the photo to the AI for assessment
+          */
         @SuppressLint("StaticFieldLeak")
         public void onClickAssess(View view) {
 
@@ -134,15 +175,21 @@ public class PendingMenuFolder extends AppCompatActivity {
                     }
 
                     /*
-                    Sends photo to AI by image source and image path.
-                    Gets back a string array from the uploader, holding the results.
-                    */
-
+                     * Sends photo to AI by image path
+                     * gets back string array from uploader holding the results.
+                     */
                     @Override
                     protected Boolean doInBackground(Void... params) {
                         Log.i(TAG, "Entering Uploader");
-                        Log.i(TAG, "path: " + mCurrentPhotoPath);
+                        if (mCurrentPhotoPath == null)
+                            return false;
                         File temp = new File(mCurrentPhotoPath);
+                        if (!temp.exists()) {
+                            wrong = true;
+                            return false;
+                        }
+                        Log.i(TAG, "path: " + mCurrentPhotoPath);
+
                         Log.i(TAG, "Does it exist? " + temp.exists());
                         result1 = uploader.uploadFile("picture", mCurrentPhotoPath);
                         result = uploader.getAllResults();
@@ -152,14 +199,10 @@ public class PendingMenuFolder extends AppCompatActivity {
                         else
                             return true;
                     }
-
                     /*
-                     Upon a successful assessment, this method takes the user to the results window.
-                     If not, it moves it to the Pending folder if there was an issue with the upload or assessment.
-                     It also shows the results of the upload (if successful) by redirecting the user
-                    to the results screen.
+                     * Upon a successful assessment, this method takes the user to the results window
+                     * and moves the photo to the history folder
                      */
-
                     @Override
                     protected void onPostExecute(Boolean aBoolean) {
                         super.onPostExecute(aBoolean);
@@ -173,7 +216,13 @@ public class PendingMenuFolder extends AppCompatActivity {
                         }
                         else {
                             Log.i(TAG, "Upload failed");
-                            Toast.makeText(getApplicationContext(), "Upload error! Leaving photo in Pending folder", Toast.LENGTH_LONG).show();
+                            if(mCurrentPhotoPath == null)
+                                Toast.makeText(getApplicationContext(), "No photo to upload!", Toast.LENGTH_LONG).show();
+                            else if(wrong)
+                                Toast.makeText(getApplicationContext(), "Photo chosen from wrong directory!", Toast.LENGTH_LONG).show();
+                            else
+                                Toast.makeText(getApplicationContext(), "Upload error! Leaving photo in Pending folder", Toast.LENGTH_LONG).show();
+
                         }
                     }
                 }.execute();
@@ -181,12 +230,10 @@ public class PendingMenuFolder extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
             }
         }
-
-    /*
-     * This method initiates the results class and send the photo path and results to the class.
-     */
-
-    public void goToResults(String path){
+        /*
+         * This method initiates the results class and sends the photo path and results to the class
+         */
+        public void goToResults(String path){
             if (!path.equals("")) {
                 Intent intent = new Intent(this, ResultScreen.class);
                 intent.putExtra("photoPath", path);
@@ -197,11 +244,9 @@ public class PendingMenuFolder extends AppCompatActivity {
                 Log.e(TAG, "results path problem, line 135");
             }
         }
-
-            /*
-            This method moves a photo to its appropriate folder, depending on success or failure of the upload to the AI.
-             */
-
+        /*
+         *This method moves a photo to the history folder
+         */
         private String movePhoto() {
             File photoFile = new File(mCurrentPhotoPath);
             String path = "";
@@ -264,11 +309,11 @@ public class PendingMenuFolder extends AppCompatActivity {
                 Log.e(TAG, "hate 3, " + e.getLocalizedMessage());
             }
 
-            /*
+
             results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
 
             try {
-                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1) + "\n").getBytes());
+                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')) + "\n").getBytes());
                 Log.i(TAG, "past path, writing results");
                 outputStream.write((result[1] + " " + result[2] + "\n").getBytes());
             } catch (IOException ex) {
@@ -276,7 +321,7 @@ public class PendingMenuFolder extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(TAG, "Error with dict: " + e.getLocalizedMessage());
             }
-            */
+
             photoFile.delete();
             return path;
         }

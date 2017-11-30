@@ -211,6 +211,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     Log.i(TAG, "Entering Uploader");
                     result1 = uploader.uploadFile(name, mCurrentPhotoPath);
                     result = uploader.getAllResults();
+                    Log.i(TAG, "result1: " + result1);
+                    Log.i(TAG, "result length: " + result.length);
 
                     if (result1.equals(""))
                         return false;
@@ -363,7 +365,7 @@ public class UploadPhotoMenu extends AppCompatActivity {
 
             results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
             try {
-                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1) + "\n").getBytes());
+                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')) + "\n").getBytes());
                 Log.i(TAG, "past path, writing results");
                 outputStream.write((result[1] + " " + result[2] + "\n").getBytes());
             } catch (IOException ex) {

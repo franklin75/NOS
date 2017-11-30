@@ -7,9 +7,10 @@ import android.view.View;
 
 public class ImageClassification extends AppCompatActivity {
 
+
     /*
-   References image classification activity xml page. All content is on the design and text page.
-    */
+    References image classification activity xml page. All content is on the design and text page.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +19,8 @@ public class ImageClassification extends AppCompatActivity {
     }
 
     /*
-    This method initiates the main menu class
+    This method initiates the main menu class.
      */
-
     public void buttonUploadMenu(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
