@@ -210,6 +210,8 @@ public class UploadPhotoMenu extends AppCompatActivity {
                     Log.i(TAG, "Entering Uploader");
                     result1 = uploader.uploadFile(name, mCurrentPhotoPath);
                     result = uploader.getAllResults();
+                    Log.i(TAG, "result1: " + result1);
+                    Log.i(TAG, "result length: " + result.length);
 
                     if (result1.equals(""))
                         return false;

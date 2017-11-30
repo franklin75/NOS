@@ -28,6 +28,10 @@ public class Uploader {
     private File file;
     Bitmap bitMap;
 
+    /*
+     * This method constructs the HTTP POST request and thus uploads the image to the AI
+     * The returned String value is used elsewhere to determine whether the AI could be reached or not
+     */
     public String uploadFile(String name, String photoPath) {
         file = new File(photoPath);
         Log.i(TAG, "1111path: " + photoPath);
@@ -69,10 +73,16 @@ public class Uploader {
         }
     }
 
+    /*
+     * This method returns the decision of whether the image contains food
+     */
     public String getResults() {
         return res;
     }
 
+    /*
+     * This method returns the entire response from the AI
+     */
     public String[] getAllResults() { return res2; }
 }
 

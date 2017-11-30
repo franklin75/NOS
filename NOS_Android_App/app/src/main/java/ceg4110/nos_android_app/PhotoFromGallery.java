@@ -55,6 +55,7 @@ public class PhotoFromGallery extends AppCompatActivity {
     //File photoFile = null;
     Uri uri;
     File path;
+    boolean wrong = false;
 
     private Hashtable<String, String> results;
     File dict;
@@ -62,6 +63,10 @@ public class PhotoFromGallery extends AppCompatActivity {
 
     File photoFile = null;
 
+
+    /*
+    The onCreate method creates a dictionary, hash table to store the results from previous uploads, and an Uploader object.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +176,10 @@ public class PhotoFromGallery extends AppCompatActivity {
 
 
     }
+    /*
+     * This method is called when the Assess button is pressed. This method creates a new Uploader object that
+     * sends the photo to the AI for assessment.
+     */
 
     @SuppressLint("StaticFieldLeak")
     public void onClickAssess(View view) {
@@ -189,9 +198,19 @@ public class PhotoFromGallery extends AppCompatActivity {
                     progressDialog.show();
                 }
 
+                /*
+                Sends photo to the AI by image path. Gets back a string array from the uploader, holding the results.
+                 */
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     Log.i(TAG, "Entering Uploader");
+                    File temp = new File(mCurrentPhotoPath);
+                    if (mCurrentPhotoPath == null)
+                        return false;
+                    if (!temp.exists()) {
+                        wrong = true;
+                        return false;
+                    }
                     result1 = uploader.uploadFile("picture", mCurrentPhotoPath);
                     result = uploader.getAllResults();
 
@@ -200,6 +219,14 @@ public class PhotoFromGallery extends AppCompatActivity {
                     else
                         return true;
                 }
+
+                /*
+                Moves photo to appropriate folder, depending on the success of the upload.
+                Upon a successful assessment, this method moves the photo to the History folder.
+                If not, it moves it to the Pending folder if there was an issue with the upload or assessment.
+                It also shows the results of the upload (if successful) by redirecting the user to the
+                results screen.
+                 */
 
                 @Override
                 protected void onPostExecute(Boolean aBoolean) {
@@ -218,11 +245,14 @@ public class PhotoFromGallery extends AppCompatActivity {
                     }
                     else {
                         Log.i(TAG, "Upload failed");
-                        Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
-                        //Intent intent = new Intent(mContext, PendingMenuFolder.class);
-                       // intent.putExtra("photoPath", mCurrentPhotoPath);
-                        //startActivity(intent);
-                        movePhoto("Pending");
+                        if (mCurrentPhotoPath == null)
+                            Toast.makeText(getApplicationContext(), "No photo selected!", Toast.LENGTH_LONG).show();
+                        else if(wrong)
+                            Toast.makeText(getApplicationContext(), "Photo chosen from wrong directory!", Toast.LENGTH_LONG).show();
+                        else {
+                            Toast.makeText(getApplicationContext(), "Upload error! Moving photo to Pending folder", Toast.LENGTH_LONG).show();
+                            movePhoto("Pending");
+                        }
                     }
                 }
             }.execute();
@@ -232,7 +262,13 @@ public class PhotoFromGallery extends AppCompatActivity {
         }
     }
 
+    /*
+    This method moves a photo to its appropriate folder, depending on success or failure of the upload to the AI.
+    It takes in a string value of the folder the photo should be moved to.
+     */
+
     protected void movePhoto(String folder) {
+        // if going to pending folder
         if (folder.equals("Pending")) {
 
             Log.i(TAG, "Upload failed");
@@ -291,12 +327,13 @@ public class PhotoFromGallery extends AppCompatActivity {
                 Log.e(TAG, "hate 3, " + e.getLocalizedMessage());
             }
 
-            Toast.makeText(getApplicationContext(), "Upload error! Moved photo to Pending folder", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(mContext, PendingMenuFolder.class);
             intent.putExtra("photoPath", mCurrentPhotoPath);
             startActivityForResult(intent, 3);
 
-        } else if (folder.equals("History")) {
+        }
+        // if going to history folder
+        else if (folder.equals("History")) {
             Log.i(TAG, "Upload succeeded");
             try {
                 byte[] buffer = new byte[2048];
@@ -353,10 +390,12 @@ public class PhotoFromGallery extends AppCompatActivity {
                 Log.e(TAG, "hate 3, " + e.getLocalizedMessage());
             }
 
+            // updates the dictionary
             results.put(mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')), result[1] + " " + result[2]);
             try {
-                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1) + "\n").getBytes());
+                outputStream.write((mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/')) + "\n").getBytes());
                 Log.i(TAG, "past path, writing results");
+                Log.i(TAG, "results: " + result[1] + " " + result[2]);
                 outputStream.write((result[1] + " " + result[2] + "\n").getBytes());
             } catch (IOException ex) {
                 Log.e(TAG, "Cannot write to dictionary file");
@@ -370,6 +409,7 @@ public class PhotoFromGallery extends AppCompatActivity {
     /*
      * This method initiates the results class and send the photo path and results to the class.
      */
+
     public void goToResults(){
         Intent intent = new Intent(this, ResultScreen.class);
         intent.putExtra("photoPath", mCurrentPhotoPath);

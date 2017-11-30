@@ -8,6 +8,9 @@ import android.view.View;
 
 public class Tutorial extends AppCompatActivity {
 
+    /*
+    References tutorial activity xml page. All content is on the design and text page.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
